@@ -17,6 +17,7 @@ class Result : AppCompatActivity() {
     private lateinit var mAdapter: CustomAdapter
     private lateinit var mArray: ArrayList<RecResult>
     private var data: ArrayList<RecResult> = arrayListOf()
+    private var csv = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,8 @@ class Result : AppCompatActivity() {
         binding.correct.text = realm.where<Settings>().findFirst()!!.howManyCorrect.toString()
         binding.total.text = realm.where<Settings>().findFirst()!!.howMany.toString()
 
+        csv = realm.where<Settings>().findFirst()?.csv.toString()
+
         binding.check.setOnClickListener {
             AlertDialog.Builder(this)
                 .setMessage("間違えた問題すべてにチェックしますか？")
@@ -71,13 +74,13 @@ class Result : AppCompatActivity() {
             for (i in 0 until result.size) {
                 if (
                     realm.where<Check>()
-                        .equalTo("kind", "")
+                        .equalTo("kind", csv)
                         .equalTo("id", result[i]!!.id + 1)
                         .findFirst()
                         == null
                 ) {
                     val obj = realm.createObject<Check>()
-                    obj.kind = ""
+                    obj.kind = csv
                     obj.id = result[i]!!.id + 1
                 }
             }

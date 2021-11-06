@@ -37,6 +37,7 @@ class TestScreen : AppCompatActivity() {
     private var answered = false
     private var checked = false
     private var check = 0
+    private var csv = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +75,7 @@ class TestScreen : AppCompatActivity() {
                 numList.size
             }
             else -> if (howMany <= numList.size) howMany else {
-                Toast.makeText(applicationContext, "問題が${howMany}問より少ないので${numList.size}問出題します。", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "問題が${howMany}問より少ないので${numList.size}問出題します。", Toast.LENGTH_SHORT).show()
                 realm.executeTransaction {
                     val target = realm.where<Settings>().findAll()
                     target.deleteAllFromRealm()
@@ -85,13 +86,13 @@ class TestScreen : AppCompatActivity() {
             }
         }
         val checkR = realm.where<Check>()
-            .equalTo("kind", "")
+            .equalTo("kind", csv)
             .equalTo("id", num + 1)
             .findFirst()
         checked = checkR != null
 
         val checkList = realm.where<Check>()
-            .equalTo("kind", "")
+            .equalTo("kind", csv)
             .findAll()
         Log.e("tag", "$checkList")
 
@@ -124,8 +125,8 @@ class TestScreen : AppCompatActivity() {
     }
 
     private fun createData() {
-        val csv = realm.where<Settings>().findFirst()?.csv
-        val reader = BufferedReader(InputStreamReader(resources.assets.open("$csv")))
+        csv = realm.where<Settings>().findFirst()?.csv.toString()
+        val reader = BufferedReader(InputStreamReader(resources.assets.open(csv)))
         reader.use {
             val records = CSVFormat.EXCEL.parse(reader)
             realm.beginTransaction()
@@ -164,9 +165,12 @@ class TestScreen : AppCompatActivity() {
     }
 
     private fun adaptCheck() {
-        val checkList = realm.where<Check>().findAll()
+        val checkList = realm.where<Check>()
+            .equalTo("kind", csv)
+            .findAll()
         if (checkList.isEmpty() || check == 3) return
         Log.e("adapt", "here")
+        Log.e("adapt", "$checkList")
         if (check == 1) {
             numList.clear()
             for (i in 0 until checkList.size) {
@@ -252,18 +256,18 @@ class TestScreen : AppCompatActivity() {
         if (checked) {
             realm.executeTransaction {
                 val target = realm.where<Check>()
-                    .equalTo("kind", "")
+                    .equalTo("kind", csv)
                     .equalTo("id", num + 1)
                     .findAll()
                 target.deleteAllFromRealm()
                 val obj = realm.createObject<Check>()
-                obj.kind = ""
+                obj.kind = csv
                 obj.id = num + 1
             }
         } else {
             realm.executeTransaction {
                 val target = realm.where<Check>()
-                    .equalTo("kind", "")
+                    .equalTo("kind", csv)
                     .equalTo("id", num + 1)
                     .findAll()
                 target.deleteAllFromRealm()
@@ -273,7 +277,7 @@ class TestScreen : AppCompatActivity() {
 
     private fun checkInitialize() {
         val checkResult = realm.where<Check>()
-            .equalTo("kind", "")
+            .equalTo("kind", csv)
             .equalTo("id", num + 1)
             .findFirst()
         checked = checkResult != null

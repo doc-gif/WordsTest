@@ -43,7 +43,9 @@ class Select : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding.all.setOnClickListener { howMany = 99 }
         binding.start.setOnClickListener {
             if (check == 1) {
-                val result = realm.where<Check>().findAll()
+                val result = realm.where<Check>()
+                    .equalTo("kind", csv)
+                    .findAll()
                 if (result.isEmpty()) return@setOnClickListener
             }
             if (howMany != 0) {
