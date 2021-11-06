@@ -178,8 +178,6 @@ class TestScreen : AppCompatActivity() {
                 numList.add(checkList[i]!!.id - 1)
             }
             Log.e("numL", "$numList")
-        } else {
-
         }
     }
 
