@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\app\src\main\assets\japanese.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\app\src\main\assets\sample.csv">
           <value>
             <Attribute>

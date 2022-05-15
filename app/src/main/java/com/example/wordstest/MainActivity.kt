@@ -23,6 +23,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.button2.setOnClickListener {
+            val intent = Intent(this, SelectCardTest::class.java)
+            startActivity(intent)
+        }
+
         binding.checkReset.setOnClickListener {
             realm.executeTransaction {
                 val target = realm.where<Check>().findAll()

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinner_array">
+        <item>inorganic.csv</item>
+        <item>organic.csv</item>
+        <item>sugar.csv</item>
+        <item>highmolecular.csv</item>
         <item>chemical.csv</item>
         <item>japanese.csv</item>
         <item>sample.csv</item>
